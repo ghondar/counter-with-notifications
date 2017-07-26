@@ -16,12 +16,25 @@ import {
   AppState
 } from 'react-native';
 
+const toHHMMSS = function (number) {
+    var sec_num = parseInt(number, 10); // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return hours+':'+minutes+':'+seconds;
+}
+
 export default class notificationTest extends Component {
   constructor(props) {
     super(props)
     this.state = {
       count: 0,
       appState: '',
+      text: '',
       intervalId: 0
     }
   }
@@ -60,7 +73,7 @@ export default class notificationTest extends Component {
         </TouchableHighlight>
         <Text style={{
           fontSize: 40
-        }}>{this.state.count}</Text>
+        }}>{toHHMMSS(this.state.count)}</Text>
       </View>
     );
   }
@@ -79,7 +92,7 @@ export default class notificationTest extends Component {
               autoCancel: true, // (optional) default: true
               largeIcon: "ic_launcher", // (optional) default: "ic_launcher"
               smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher"
-              bigText: this.state.count + '', // (optional) default: "message" prop
+              bigText: toHHMMSS(this.state.count), // (optional) default: "message" prop
               subText: "Contador", // (optional) default: none
               color: "red", // (optional) default: system default
               vibrate: false, // (optional) default: true
@@ -90,7 +103,7 @@ export default class notificationTest extends Component {
 
               /* iOS and Android properties */
               title: "My Notification Title", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
-              message: this.state.count + '', // (required)
+              message: toHHMMSS(this.state.count), // (required)
               playSound: false, // (optional) default: true
             });
         })
